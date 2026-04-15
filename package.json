@@ -1,0 +1,13 @@
+{
+  "name": "inkwell-booking",
+  "version": "1.0.0",
+  "description": "Inkwell Tattoo Studio — booking backend",
+  "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.43.0",
+    "resend": "^3.2.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
