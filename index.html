@@ -990,13 +990,15 @@
         submitBtn.parentNode.insertBefore(errBanner, submitBtn);
       }
       errBanner.textContent = `⚠ ${err.message} — please try again or email us directly.`;
-    } finally {
+   } finally {
       submitBtn.disabled = false;
       submitBtn.querySelector('span').textContent = 'Send Booking Request';
       submitBtn.style.opacity = '1';
     }
+  });
+</script>
 
  
-</script>
+
 </body>
 </html>
