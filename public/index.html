@@ -930,7 +930,14 @@
     const placement = Array.from(form.querySelectorAll('input[name="placement"]:checked'))
       .map(cb => cb.value);
 
-    // Build payload
+    // Convert files to base64 for reliable serverless upload
+    const refFiles = await Promise.all(files.map(f => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve({ name: f.name, type: f.type, base64: reader.result.split(',')[1] });
+      reader.onerror = reject;
+      reader.readAsDataURL(f);
+    })));
+
     const payload = {
       fname:         form.fname.value.trim(),
       lname:         form.lname.value.trim(),
@@ -945,7 +952,7 @@
       date1:         form.date1.value,
       date2:         form.date2.value,
       timeOfDay:     form.timeOfDay.value,
-      fileNames:     files.map(f => f.name)
+      refFiles
     };
 
     // Loading state
