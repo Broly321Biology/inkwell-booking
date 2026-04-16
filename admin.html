@@ -1223,7 +1223,21 @@ async function updateStatus(id, status) {
   closeModalDirect();
   await loadBookings();
 }
-
+function openDayList(bookings) {
+  document.getElementById('modalName').textContent = bookings.length + ' Bookings';
+  document.getElementById('modalRef').textContent = bookings[0].preferred_date1 || '';
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-section">
+      <div class="modal-section-title">Select a Booking</div>
+      ${bookings.map(b => `
+        <div onclick="openModal('${b.id}')" style="padding:14px 16px;border:1px solid var(--border);background:var(--deep);margin-bottom:8px;cursor:pointer;transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--red)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--cream);">${b.first_name} ${b.last_name}</div>
+          <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:4px;letter-spacing:0.2em;text-transform:uppercase;">${b.email} &nbsp;·&nbsp; <span class="status-badge status-${b.status}">${b.status}</span></div>
+        </div>`).join('')}
+    </div>`;
+  document.getElementById('modalActions').innerHTML = '';
+  document.getElementById('modalOverlay').classList.add('show');
+}
 // ── CALENDAR ────────────────────────────────────────────────────
 function renderCalendar() {
   const year  = calendarDate.getFullYear();
@@ -1275,7 +1289,13 @@ function renderCalendar() {
         dots.appendChild(dot);
       });
       el.appendChild(dots);
-      el.onclick = () => openModal(dayBookings[0].id);
+      el.onclick = () => {
+  if (dayBookings.length === 1) {
+    openModal(dayBookings[0].id);
+  } else {
+    openDayList(dayBookings);
+  }
+};
     }
 
     grid.appendChild(el);
